@@ -1,0 +1,13 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown 줄 끝 공백 두 칸은 명시적 줄바꿈을 의미하므로 유지합니다.
+[*.md]
+trim_trailing_whitespace = false

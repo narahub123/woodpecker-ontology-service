@@ -1,0 +1,32 @@
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and local tooling
+*.log
+.vercel/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Internal architecture and agent governance
+AGENTS.md
+TECHNICAL_DESIGN.md
+.harness/
+docs/architecture/
+docs/adr/

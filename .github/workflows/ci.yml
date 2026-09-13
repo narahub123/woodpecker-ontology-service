@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - development
+      - main
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  HUSKY: 0
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: node_modules 캐시 복원
+        id: node-modules-cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-v1-${{ runner.os }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
+
+      - name: 의존성 설치
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 의존성 트리 확인
+        if: steps.node-modules-cache.outputs.cache-hit == 'true'
+        run: npm ls --all > /dev/null
+
+      - name: ESLint 검사
+        run: npm run lint
+
+      - name: Prettier 검사
+        run: npm run format:check
+
+      - name: TypeScript 검사
+        run: npm run type-check
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: node_modules 캐시 복원
+        id: node-modules-cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-v1-${{ runner.os }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
+
+      - name: 의존성 설치
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 의존성 트리 확인
+        if: steps.node-modules-cache.outputs.cache-hit == 'true'
+        run: npm ls --all > /dev/null
+
+      - name: Vitest 실행
+        run: npm test
+
+  commit-message:
+    name: Commit Message
+    runs-on: ubuntu-latest
+    steps:
+      - name: 전체 이력 체크아웃
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 의존성 설치
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: PR 커밋 메시지 검사
+        run: npx commitlint --from "${{ github.event.pull_request.base.sha }}" --to "${{ github.event.pull_request.head.sha }}"
+
+  dependency-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: high 이상 취약점 검사
+        run: npm audit --audit-level=high
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+
+      - name: PR 의존성 변경 검사
+        uses: actions/dependency-review-action@v5

@@ -121,3 +121,13 @@ jobs:
 
       - name: high 이상 취약점 검사
         run: npm audit --audit-level=high
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+
+      - name: PR 의존성 변경 검사
+        uses: actions/dependency-review-action@v5

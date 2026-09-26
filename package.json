@@ -18,7 +18,7 @@
     "db:migrate:up": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m migrations",
     "db:migrate:down": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js down -m migrations",
     "db:migrate:dry-run": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m migrations --dry-run",
-    "test:db": "node --env-file-if-exists=.env ./node_modules/vitest/vitest.mjs run --config vitest.database.config.ts"
+    "test:db": "node --env-file-if-exists=.env scripts/run-database-tests.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.4",

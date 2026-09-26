@@ -70,7 +70,7 @@ CREATE TABLE ontology_text_units (
   block_ids TEXT[] NOT NULL,
   section_path TEXT[] NOT NULL DEFAULT '{}',
   line INTEGER NOT NULL,
-  column INTEGER NOT NULL,
+  source_column INTEGER NOT NULL,
   start_offset INTEGER NOT NULL,
   end_offset INTEGER NOT NULL,
   analysis_text TEXT NOT NULL,
@@ -92,8 +92,8 @@ CREATE TABLE ontology_text_units (
   CONSTRAINT ontology_text_units_line_check
     CHECK (line >= 1),
 
-  CONSTRAINT ontology_text_units_column_check
-    CHECK (column >= 1),
+  CONSTRAINT ontology_text_units_source_column_check
+    CHECK (source_column >= 1),
 
   CONSTRAINT ontology_text_units_offset_check
     CHECK (
@@ -108,7 +108,7 @@ CREATE TABLE ontology_evidence_anchors (
   source_kind TEXT NOT NULL,
   text_unit_key TEXT,
   line INTEGER,
-  column INTEGER,
+  source_column INTEGER,
   start_offset INTEGER,
   end_offset INTEGER,
   raw_excerpt TEXT NOT NULL,

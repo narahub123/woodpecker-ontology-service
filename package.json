@@ -15,10 +15,10 @@
     "check": "npm run format:check && npm run lint && npm run type-check && npm test",
     "commitlint": "commitlint --edit",
     "db:migrate:create": "node-pg-migrate create -j sql --migration-filename-format utc -m migrations",
-    "db:migrate:up": "node-pg-migrate up -m migrations",
-    "db:migrate:down": "node-pg-migrate down -m migrations",
-    "db:migrate:dry-run": "node-pg-migrate up -m migrations --dry-run",
-    "test:db": "vitest run --config vitest.database.config.ts"
+    "db:migrate:up": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m migrations",
+    "db:migrate:down": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js down -m migrations",
+    "db:migrate:dry-run": "node --env-file-if-exists=.env ./node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m migrations --dry-run",
+    "test:db": "node --env-file-if-exists=.env ./node_modules/vitest/vitest.mjs run --config vitest.database.config.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.4",

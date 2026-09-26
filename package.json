@@ -14,7 +14,7 @@
     "type-check": "tsc --noEmit",
     "check": "npm run format:check && npm run lint && npm run type-check && npm test",
     "commitlint": "commitlint --edit",
-    "db:migrate:create": "node-pg-migrate create -j ts -m migrations",
+    "db:migrate:create": "node-pg-migrate create -j sql --migration-filename-format utc -m migrations",
     "db:migrate:up": "node-pg-migrate up -m migrations",
     "db:migrate:down": "node-pg-migrate down -m migrations",
     "db:migrate:dry-run": "node-pg-migrate up -m migrations --dry-run",

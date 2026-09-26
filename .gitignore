@@ -27,6 +27,5 @@ Thumbs.db
 # Internal architecture and agent governance
 AGENTS.md
 TECHNICAL_DESIGN.md
-.harness/
 docs/architecture/
 docs/adr/

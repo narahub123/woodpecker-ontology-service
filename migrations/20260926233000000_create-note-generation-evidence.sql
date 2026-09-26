@@ -139,22 +139,24 @@ CREATE TABLE ontology_evidence_anchors (
   CONSTRAINT ontology_evidence_anchors_position_check
     CHECK (
       (
-        line IS NULL
-        AND column IS NULL
+        (
+          line IS NULL
+          AND source_column IS NULL
+        )
+        OR (
+          line >= 1
+          AND source_column >= 1
+        )
       )
-      OR (
-        line >= 1
-        AND column >= 1
-      )
-    )
-    AND (
-      (
-        start_offset IS NULL
-        AND end_offset IS NULL
-      )
-      OR (
-        start_offset >= 0
-        AND end_offset >= start_offset
+      AND (
+        (
+          start_offset IS NULL
+          AND end_offset IS NULL
+        )
+        OR (
+          start_offset >= 0
+          AND end_offset >= start_offset
+        )
       )
     )
 );
